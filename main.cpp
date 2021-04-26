@@ -3,7 +3,7 @@
 #include <vector>
 #include <SFML/Graphics.hpp>
 using namespace std;
-
+//kek
 class BMP
 {
 public:
