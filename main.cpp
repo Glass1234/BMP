@@ -1,13 +1,11 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include <SFML/Graphics.hpp>
 using namespace std;
-//kek
+
 class BMP
 {
 public:
-    // BMP() {}
     BMP(string image)
     {
         this->image = image;
@@ -54,40 +52,11 @@ public:
         cout << sizeof(INFO().size) + sizeof(INFO().width) + sizeof(INFO().height) + sizeof(INFO().planes) + sizeof(INFO().bitcount) + sizeof(INFO().compression) + sizeof(INFO().sizeimage) + sizeof(INFO().unused) << endl;
 
         cout << "RGB: " << sizeof(RGB) << '-';
-        cout << sizeof(RGB().b) + sizeof(RGB().g) + sizeof(RGB().r) << endl;
+        cout << sizeof(RGB().b) + sizeof(RGB().g) + sizeof(RGB().r) + sizeof(RGB().unused) << endl;
 
         cout << "size_rgb:";
         cout << rgb_arr.size() << endl;
 
-        // sf::RenderWindow window(sf::VideoMode(800, 600), "SFML Works!");
-        // sf::Image buffer;
-        // buffer.create(this->info.width, this->info.height, sf::Color(0, 0, 0));
-
-        // for (int i = 0; i < this->info.height; i++)
-        // {
-        //     for (int j = 0; j < this->info.width; j++)
-        //     {
-        //         RGB data = rgb_arr[(i * this->info.width) + j];
-        //         buffer.setPixel(j, (this->info.height - 1) - i, sf::Color(data.r, data.g, data.b));
-        //     }
-        // }
-
-        // sf::Rect<int> rectangle(0, 0, this->info.width, this->info.height);
-        // sf::Texture bufferTexture;
-        // bufferTexture.loadFromImage(buffer, rectangle);
-        // sf::Sprite bufferSprite(bufferTexture);
-        // bufferSprite.setScale(0.8, 0.8);
-        // while (window.isOpen())
-        // {
-        //     sf::Event event;
-        //     while (window.pollEvent(event))
-        //     {
-        //         if (event.type == sf::Event::Closed)
-        //             window.close();
-        //     }
-        //     window.draw(bufferSprite);
-        //     window.display();
-        // }
         cout << "-----------------------------------------------------" << endl;
     }
     void TF()
