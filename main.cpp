@@ -188,11 +188,11 @@ private:
     string image;
 };
 
-int main()
+int main(int argc, char *argv[])
 {
-    BMP test("image7.bmp");
+    BMP test(argv[argc - 1]);
     test.OpenRB();
     test.TF();
     test.Write();
-    test.STDOUT();
+    // test.STDOUT();
 }
