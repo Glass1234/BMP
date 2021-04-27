@@ -67,31 +67,29 @@ public:
         {
             for (int j = 0; j < this->info.width; j++)
             {
-                RGB *data = &this->rgb_arr[(i * this->info.width) + j];
-                uint8_t S = (data->r + data->g + data->b) / 3;
+                RGB *data = &this->rgb_arr[(i * this->info.width) + j]; //берём i пиксель
+                uint8_t S = (data->r + data->g + data->b) / 3;          //определяем средний цвет
 
-                if (S < (0xFF / 2))
+                if (S < (0xFF / 2)) //если пиксель меньше 128 тогда он чёрный
                 {
-                    error = (S - 0x00) / 16;
+                    error = (S - 0x00) / 16; //вычеслем ошибку для применени метода дизеринга
                     S = 0x00;
                 }
-                else
+                else //иначе белый
                 {
                     error = (S - 0xFF) / 16;
                     S = 0xFF;
                 }
 
-                *data = RGB{S, S, S};
+                *data = RGB{S, S, S}; //создаём "пиксель" которому мы уже сменили цветы
 
-                int x = j;
-                int y = (this->info.height - 1) - i;
-
-                if (j < this->info.width - 1)
+                //накладывание шума
+                if (j < this->info.width - 1) //если пиксель не вылез за границы
                 {
-                    data = &this->rgb_arr[(i * this->info.width) + j + 1];
-                    S = (data->r + data->g + data->b) / 3;
-                    S += 7 * error;
-                    *data = RGB{S, S, S};
+                    data = &this->rgb_arr[(i * this->info.width) + j + 1]; //берём следующий пиксель
+                    S = (data->r + data->g + data->b) / 3;                 //находим его цвет
+                    S += 7 * error;                                        //делаем пропорцию
+                    *data = RGB{S, S, S};                                  //записываем готовый результат
                 }
 
                 if (j < this->info.width - 1 && i < this->info.height - 1)
