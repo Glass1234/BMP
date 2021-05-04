@@ -63,56 +63,110 @@ public:
     {
         float error = 0.0f;
 
-        for (int i = 0; i < this->info.height; i++)
+        for (int i = 0; i < this->info.height; i++) //высота
         {
-            for (int j = 0; j < this->info.width; j++)
+            for (int j = 0; j < this->info.width; j++) //ширина
             {
                 RGB *data = &this->rgb_arr[(i * this->info.width) + j]; //берём i пиксель
                 uint8_t S = (data->r + data->g + data->b) / 3;          //определяем средний цвет
 
                 if (S < (0xFF / 2)) //если пиксель меньше 128 тогда он чёрный
                 {
-                    error = (S - 0x00) / 16; //вычеслем ошибку для применени метода дизеринга
+                    error = (S - 0x00) / 42; //вычеслем ошибку для применени метода дизеринга
                     S = 0x00;
                 }
                 else //иначе белый
                 {
-                    error = (S - 0xFF) / 16;
+                    error = (S - 0xFF) / 42;
                     S = 0xFF;
                 }
 
                 *data = RGB{S, S, S}; //создаём "пиксель" которому мы уже сменили цветы
 
                 //накладывание шума
-                if (j < this->info.width - 1) //если пиксель не вылез за границы
-                {
-                    data = &this->rgb_arr[(i * this->info.width) + j + 1]; //берём следующий пиксель
-                    S = (data->r + data->g + data->b) / 3;                 //находим его цвет
-                    S += 7 * error;                                        //делаем пропорцию
-                    *data = RGB{S, S, S};                                  //записываем готовый результат
-                }
 
-                if (j < this->info.width - 1 && i < this->info.height - 1)
+                if (j < this->info.width - 1) //справа
+                {
+                    data = &this->rgb_arr[(i * this->info.width) + j + 1];
+                    S = (data->r + data->g + data->b) / 3;
+                    S += 8 * error;
+                    *data = RGB{S, S, S};
+                }
+                if (j < this->info.width - 2) //справа + 1
+                {
+                    data = &this->rgb_arr[(i * this->info.width) + j + 2];
+                    S = (data->r + data->g + data->b) / 3;
+                    S += 4 * error;
+                    *data = RGB{S, S, S};
+                }
+                if (j < this->info.width - 1 && i < this->info.height - 1) //снизу справа
                 {
                     data = &this->rgb_arr[((i + 1) * this->info.width) + j + 1];
                     S = (data->r + data->g + data->b) / 3;
-                    S += 1 * error;
+                    S += 4 * error;
                     *data = RGB{S, S, S};
                 }
-
-                if (i < this->info.height - 1)
+                if (j < this->info.width - 1 && i < this->info.height - 1) //снизу справа + 1
+                {
+                    data = &this->rgb_arr[((i + 1) * this->info.width) + j + 2];
+                    S = (data->r + data->g + data->b) / 3;
+                    S += 2 * error;
+                    *data = RGB{S, S, S};
+                }
+                if (j < this->info.width - 2 && i < this->info.height - 2) //снизу + 1 справа
+                {
+                    data = &this->rgb_arr[((i + 2) * this->info.width) + j + 1];
+                    S = (data->r + data->g + data->b) / 3;
+                    S += 2 * error;
+                    *data = RGB{S, S, S};
+                }
+                if (j < this->info.width - 2 && i < this->info.height - 2) //снизу + 1 справа + 1
+                {
+                    data = &this->rgb_arr[((i + 2) * this->info.width) + j + 2];
+                    S = (data->r + data->g + data->b) / 3;
+                    S += error;
+                    *data = RGB{S, S, S};
+                }
+                if (j < this->info.width - 1) //снизу
                 {
                     data = &this->rgb_arr[((i + 1) * this->info.width) + j];
                     S = (data->r + data->g + data->b) / 3;
-                    S += 5 * error;
+                    S += 8 * error;
                     *data = RGB{S, S, S};
                 }
-
-                if (j < this->info.width + 1 && i < this->info.height - 1)
+                if (j < this->info.width - 2) //снизу + 1
+                {
+                    data = &this->rgb_arr[((i + 2) * this->info.width) + j];
+                    S = (data->r + data->g + data->b) / 3;
+                    S += 4 * error;
+                    *data = RGB{S, S, S};
+                }
+                if (j < this->info.width + 1 && j < this->info.height - 2) //снизу слева + 1
+                {
+                    data = &this->rgb_arr[((i + 1) * this->info.width) + j - 2];
+                    S = (data->r + data->g + data->b) / 3;
+                    S += 2 * error;
+                    *data = RGB{S, S, S};
+                }
+                if (j < this->info.width + 1 && j < this->info.height - 1) //снизу слева
                 {
                     data = &this->rgb_arr[((i + 1) * this->info.width) + j - 1];
                     S = (data->r + data->g + data->b) / 3;
-                    S += 3 * error;
+                    S += 4 * error;
+                    *data = RGB{S, S, S};
+                }
+                if (j < this->info.width + 2 && j < this->info.height - 2) //снизу + 1 слева + 1
+                {
+                    data = &this->rgb_arr[((i + 2) * this->info.width) + j - 2];
+                    S = (data->r + data->g + data->b) / 3;
+                    S += error;
+                    *data = RGB{S, S, S};
+                }
+                if (j < this->info.width + 2 && j < this->info.height - 1) //снизу + 1 слева
+                {
+                    data = &this->rgb_arr[((i + 2) * this->info.width) + j - 1];
+                    S = (data->r + data->g + data->b) / 3;
+                    S += 2 * error;
                     *data = RGB{S, S, S};
                 }
             }
