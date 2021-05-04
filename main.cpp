@@ -41,24 +41,24 @@ public:
             cout << "ERROR" << endl;
         }
     }
-    void STDOUT()
-    {
-        cout << "------------------------debag------------------------" << endl;
+    // void STDOUT()
+    // {
+    //     cout << "------------------------debag------------------------" << endl;
 
-        cout << "HEAD: " << sizeof(HEAD) << '-';
-        cout << sizeof(HEAD().type) + sizeof(HEAD().size) + sizeof(HEAD().reserv) + sizeof(HEAD().offbits) << endl;
+    //     cout << "HEAD: " << sizeof(HEAD) << '-';
+    //     cout << sizeof(HEAD().type) + sizeof(HEAD().size) + sizeof(HEAD().reserv) + sizeof(HEAD().offbits) << endl;
 
-        cout << "INFO: " << sizeof(INFO) << '-';
-        cout << sizeof(INFO().size) + sizeof(INFO().width) + sizeof(INFO().height) + sizeof(INFO().planes) + sizeof(INFO().bitcount) + sizeof(INFO().compression) + sizeof(INFO().sizeimage) + sizeof(INFO().unused) << endl;
+    //     cout << "INFO: " << sizeof(INFO) << '-';
+    //     cout << sizeof(INFO().size) + sizeof(INFO().width) + sizeof(INFO().height) + sizeof(INFO().planes) + sizeof(INFO().bitcount) + sizeof(INFO().compression) + sizeof(INFO().sizeimage) + sizeof(INFO().unused) << endl;
 
-        cout << "RGB: " << sizeof(RGB) << '-';
-        cout << sizeof(RGB().b) + sizeof(RGB().g) + sizeof(RGB().r) + sizeof(RGB().unused) << endl;
+    //     cout << "RGB: " << sizeof(RGB) << '-';
+    //     cout << sizeof(RGB().b) + sizeof(RGB().g) + sizeof(RGB().r) + sizeof(RGB().unused) << endl;
 
-        cout << "size_rgb:";
-        cout << rgb_arr.size() << endl;
+    //     cout << "size_rgb:";
+    //     cout << rgb_arr.size() << endl;
 
-        cout << "-----------------------------------------------------" << endl;
-    }
+    //     cout << "-----------------------------------------------------" << endl;
+    // }
     void TF()
     {
         float error = 0.0f;
@@ -84,7 +84,6 @@ public:
                 *data = RGB{S, S, S}; //создаём "пиксель" которому мы уже сменили цветы
 
                 //накладывание шума
-
                 if (j < this->info.width - 1) //справа
                 {
                     data = &this->rgb_arr[(i * this->info.width) + j + 1];
