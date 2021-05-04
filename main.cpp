@@ -105,14 +105,14 @@ public:
                     S += 4 * error;
                     *data = RGB{S, S, S};
                 }
-                if (j < this->info.width - 1 && i < this->info.height - 1) //снизу справа + 1
+                if (j < this->info.width - 2 && i < this->info.height - 1) //снизу справа + 1
                 {
                     data = &this->rgb_arr[((i + 1) * this->info.width) + j + 2];
                     S = (data->r + data->g + data->b) / 3;
                     S += 2 * error;
                     *data = RGB{S, S, S};
                 }
-                if (j < this->info.width - 2 && i < this->info.height - 2) //снизу + 1 справа
+                if (j < this->info.width - 1 && i < this->info.height - 2) //снизу + 1 справа
                 {
                     data = &this->rgb_arr[((i + 2) * this->info.width) + j + 1];
                     S = (data->r + data->g + data->b) / 3;
@@ -126,42 +126,42 @@ public:
                     S += error;
                     *data = RGB{S, S, S};
                 }
-                if (j < this->info.width - 1) //снизу
+                if (i < this->info.height - 1) //снизу
                 {
                     data = &this->rgb_arr[((i + 1) * this->info.width) + j];
                     S = (data->r + data->g + data->b) / 3;
                     S += 8 * error;
                     *data = RGB{S, S, S};
                 }
-                if (j < this->info.width - 2) //снизу + 1
+                if (i < this->info.height - 2) //снизу + 1
                 {
                     data = &this->rgb_arr[((i + 2) * this->info.width) + j];
                     S = (data->r + data->g + data->b) / 3;
                     S += 4 * error;
                     *data = RGB{S, S, S};
                 }
-                if (j < this->info.width + 1 && j < this->info.height - 2) //снизу слева + 1
+                if (j > 1 && i < this->info.height - 2) //снизу слева + 1
                 {
                     data = &this->rgb_arr[((i + 1) * this->info.width) + j - 2];
                     S = (data->r + data->g + data->b) / 3;
                     S += 2 * error;
                     *data = RGB{S, S, S};
                 }
-                if (j < this->info.width + 1 && j < this->info.height - 1) //снизу слева
+                if (j > 0 && i < this->info.height - 1) //снизу слева
                 {
                     data = &this->rgb_arr[((i + 1) * this->info.width) + j - 1];
                     S = (data->r + data->g + data->b) / 3;
                     S += 4 * error;
                     *data = RGB{S, S, S};
                 }
-                if (j < this->info.width + 2 && j < this->info.height - 2) //снизу + 1 слева + 1
+                if (j > 1 && i < this->info.height - 2) //снизу + 1 слева + 1
                 {
                     data = &this->rgb_arr[((i + 2) * this->info.width) + j - 2];
                     S = (data->r + data->g + data->b) / 3;
                     S += error;
                     *data = RGB{S, S, S};
                 }
-                if (j < this->info.width + 2 && j < this->info.height - 1) //снизу + 1 слева
+                if (j > 0 && i < this->info.height - 2) //снизу + 1 слева
                 {
                     data = &this->rgb_arr[((i + 2) * this->info.width) + j - 1];
                     S = (data->r + data->g + data->b) / 3;
