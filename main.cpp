@@ -5,6 +5,41 @@ using namespace std;
 
 class BMP
 {
+private:
+#pragma pack(push, 1)
+    struct HEAD
+    {
+        int16_t type;
+        int32_t size;
+        int16_t reserv[2];
+        int32_t offbits;
+    };
+    struct INFO
+    {
+        int32_t size;
+        int32_t width;
+        int32_t height;
+        int16_t planes;
+        int16_t bitcount;
+        int32_t compression;
+        int32_t sizeimage;
+        int32_t unused[25];
+    };
+    struct RGB
+    {
+        uint8_t b;
+        uint8_t g;
+        uint8_t r;
+        uint8_t unused = 0xff;
+    };
+#pragma pack(pop)
+
+    HEAD head;
+    INFO info;
+    RGB rgb;
+    vector<RGB> rgb_arr;
+    string image;
+
 public:
     BMP(string image)
     {
@@ -41,24 +76,6 @@ public:
             cout << "ERROR" << endl;
         }
     }
-    // void STDOUT()
-    // {
-    //     cout << "------------------------debag------------------------" << endl;
-
-    //     cout << "HEAD: " << sizeof(HEAD) << '-';
-    //     cout << sizeof(HEAD().type) + sizeof(HEAD().size) + sizeof(HEAD().reserv) + sizeof(HEAD().offbits) << endl;
-
-    //     cout << "INFO: " << sizeof(INFO) << '-';
-    //     cout << sizeof(INFO().size) + sizeof(INFO().width) + sizeof(INFO().height) + sizeof(INFO().planes) + sizeof(INFO().bitcount) + sizeof(INFO().compression) + sizeof(INFO().sizeimage) + sizeof(INFO().unused) << endl;
-
-    //     cout << "RGB: " << sizeof(RGB) << '-';
-    //     cout << sizeof(RGB().b) + sizeof(RGB().g) + sizeof(RGB().r) + sizeof(RGB().unused) << endl;
-
-    //     cout << "size_rgb:";
-    //     cout << rgb_arr.size() << endl;
-
-    //     cout << "-----------------------------------------------------" << endl;
-    // }
     void TF()
     {
         float error = 0.0f;
@@ -86,126 +103,64 @@ public:
                 //накладывание шума
                 if (j < this->info.width - 1) //справа
                 {
-                    data = &this->rgb_arr[(i * this->info.width) + j + 1];
-                    S = (data->r + data->g + data->b) / 3;
-                    S += 8 * error;
-                    *data = RGB{S, S, S};
+                    dizering(data, 0, 1, i, j, S, 8, error);
                 }
                 if (j < this->info.width - 2) //справа + 1
                 {
-                    data = &this->rgb_arr[(i * this->info.width) + j + 2];
-                    S = (data->r + data->g + data->b) / 3;
-                    S += 4 * error;
-                    *data = RGB{S, S, S};
+                    dizering(data, 0, 2, i, j, S, 4, error);
                 }
                 if (j < this->info.width - 1 && i < this->info.height - 1) //снизу справа
                 {
-                    data = &this->rgb_arr[((i + 1) * this->info.width) + j + 1];
-                    S = (data->r + data->g + data->b) / 3;
-                    S += 4 * error;
-                    *data = RGB{S, S, S};
+                    dizering(data, 1, 1, i, j, S, 4, error);
                 }
                 if (j < this->info.width - 2 && i < this->info.height - 1) //снизу справа + 1
                 {
-                    data = &this->rgb_arr[((i + 1) * this->info.width) + j + 2];
-                    S = (data->r + data->g + data->b) / 3;
-                    S += 2 * error;
-                    *data = RGB{S, S, S};
+                    dizering(data, 1, 2, i, j, S, 2, error);
                 }
                 if (j < this->info.width - 1 && i < this->info.height - 2) //снизу + 1 справа
                 {
-                    data = &this->rgb_arr[((i + 2) * this->info.width) + j + 1];
-                    S = (data->r + data->g + data->b) / 3;
-                    S += 2 * error;
-                    *data = RGB{S, S, S};
+                    dizering(data, 2, 1, i, j, S, 2, error);
                 }
                 if (j < this->info.width - 2 && i < this->info.height - 2) //снизу + 1 справа + 1
                 {
-                    data = &this->rgb_arr[((i + 2) * this->info.width) + j + 2];
-                    S = (data->r + data->g + data->b) / 3;
-                    S += error;
-                    *data = RGB{S, S, S};
+                    dizering(data, 2, 2, i, j, S, 1, error);
                 }
                 if (i < this->info.height - 1) //снизу
                 {
-                    data = &this->rgb_arr[((i + 1) * this->info.width) + j];
-                    S = (data->r + data->g + data->b) / 3;
-                    S += 8 * error;
-                    *data = RGB{S, S, S};
+                    dizering(data, 1, 0, i, j, S, 8, error);
                 }
                 if (i < this->info.height - 2) //снизу + 1
                 {
-                    data = &this->rgb_arr[((i + 2) * this->info.width) + j];
-                    S = (data->r + data->g + data->b) / 3;
-                    S += 4 * error;
-                    *data = RGB{S, S, S};
+                    dizering(data, 2, 0, i, j, S, 4, error);
                 }
                 if (j > 1 && i < this->info.height - 2) //снизу слева + 1
                 {
-                    data = &this->rgb_arr[((i + 1) * this->info.width) + j - 2];
-                    S = (data->r + data->g + data->b) / 3;
-                    S += 2 * error;
-                    *data = RGB{S, S, S};
+                    dizering(data, 1, -2, i, j, S, 2, error);
                 }
                 if (j > 0 && i < this->info.height - 1) //снизу слева
                 {
-                    data = &this->rgb_arr[((i + 1) * this->info.width) + j - 1];
-                    S = (data->r + data->g + data->b) / 3;
-                    S += 4 * error;
-                    *data = RGB{S, S, S};
+                    dizering(data, 1, -1, i, j, S, 4, error);
                 }
                 if (j > 1 && i < this->info.height - 2) //снизу + 1 слева + 1
                 {
-                    data = &this->rgb_arr[((i + 2) * this->info.width) + j - 2];
-                    S = (data->r + data->g + data->b) / 3;
-                    S += error;
-                    *data = RGB{S, S, S};
+                    dizering(data, 2, -2, i, j, S, 1, error);
                 }
                 if (j > 0 && i < this->info.height - 2) //снизу + 1 слева
                 {
-                    data = &this->rgb_arr[((i + 2) * this->info.width) + j - 1];
-                    S = (data->r + data->g + data->b) / 3;
-                    S += 2 * error;
-                    *data = RGB{S, S, S};
+                    dizering(data, 2, -1, i, j, S, 2, error);
                 }
             }
         }
     }
 
 private:
-#pragma pack(push, 1)
-    struct HEAD
+    void dizering(RGB *data, int depth, int LR, int i, int j, uint8_t S, int coefficent, int error)
     {
-        int16_t type;
-        int32_t size;
-        int16_t reserv[2];
-        int32_t offbits;
-    };
-    struct INFO
-    {
-        int32_t size;
-        int32_t width;
-        int32_t height;
-        int16_t planes;
-        int16_t bitcount;
-        int32_t compression;
-        int32_t sizeimage;
-        int32_t unused[25];
-    };
-    struct RGB
-    {
-        uint8_t b;
-        uint8_t g;
-        uint8_t r;
-        uint8_t unused = 0xff;
-    };
-#pragma pack(pop)
-
-    HEAD head;
-    INFO info;
-    RGB rgb;
-    vector<RGB> rgb_arr;
-    string image;
+        data = &this->rgb_arr[((i + depth) * this->info.width) + j + LR];
+        S = (data->r + data->g + data->b) / 3;
+        S += coefficent * error;
+        *data = RGB{S, S, S};
+    }
 };
 
 int main(int argc, char *argv[])
